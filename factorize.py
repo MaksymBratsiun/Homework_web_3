@@ -4,7 +4,7 @@ from multiprocessing import Pool, cpu_count
 list_res = []
 
 
-def factorize(num):
+def factorize(num: int) -> list:
     list_n = []
     count = 0
     while count < num:
@@ -14,11 +14,11 @@ def factorize(num):
     return list_n
 
 
-def callback(result):
+def callback(result: list):
     list_res.append(result)
 
 
-def pool_async(*n):
+def pool_async(*n: int) -> tuple:
     with Pool(cpu_count()) as p:
         p.map_async(factorize, n, callback=callback)
         p.close()
@@ -26,10 +26,10 @@ def pool_async(*n):
     return tuple(list_res[0])
 
 
-def linear(*n):
+def linear(*n: int) -> tuple:
     result = []
-    for num in n:
-        result.append(factorize(num))
+    for number in n:
+        result.append(factorize(number))
     return tuple(result)
 
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
 
     start_a = datetime.now()
-    a_res = pool_async(128, 255, 99999, 10651060, 128, 255, 99999, 10651060, 128, 255, 99999, 10651060)
+    res_a = pool_async(128, 255, 99999, 10651060, 128, 255, 99999, 10651060, 128, 255, 99999, 10651060)
     # f, g, h, i = pool_async(128, 255, 99999, 10651060)
     # assert f == [1, 2, 4, 8, 16, 32, 64, 128]
     # assert g == [1, 3, 5, 15, 17, 51, 85, 255]
@@ -57,5 +57,5 @@ if __name__ == '__main__':
     # assert i == [1, 2, 4, 5, 7, 10, 14, 20, 28, 35, 70, 140, 76079, 152158, 304316, 380395, 532553, 760790, 1065106,
     #              1521580, 2130212, 2662765, 5325530, 10651060]
     end_a = datetime.now()
-    [print(i) for i in a_res]
+    [print(i) for i in res_a]
     print(f'Time async calculation : {end_a - start_a}')
